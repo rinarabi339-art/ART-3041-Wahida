@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A.I. FOR DESIGNERS — Wahida Irina</title>
+  <style>
+    :root {
+      --cream: #fffaf6;
+      --blush: #f8e5ed;
+      --rose: #d9aec2;
+      --rose-dark: #ab7891;
+      --ink: #5b4c54;
+      --card: rgba(255, 255, 255, 0.76);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--blush);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: clamp(12px, 3vw, 28px);
+      color: var(--ink);
+      background: linear-gradient(180deg, var(--cream) 0%, #fff7fa 48%, var(--blush) 100%);
+      font-family: "Comic Sans MS", "Comic Sans", cursive;
+    }
+
+    .outer-border {
+      width: min(100%, 980px);
+      margin: 0 auto;
+      padding: 4px;
+      border: 1px solid var(--rose);
+      background: rgba(255, 255, 255, 0.34);
+    }
+
+    .inner-border {
+      position: relative;
+      min-height: calc(100vh - 56px);
+      padding: clamp(36px, 6vw, 68px) clamp(18px, 5vw, 54px) 100px;
+      overflow: hidden;
+      border: 1px solid var(--rose);
+      background: var(--card);
+    }
+
+    .site-header {
+      text-align: center;
+    }
+
+    h1 {
+      max-width: 900px;
+      margin: 0 auto 22px;
+      font-size: clamp(2rem, 5.4vw, 4.25rem);
+      line-height: 1.15;
+      text-align: center;
+    }
+
+    .name,
+    .semester {
+      color: #9c7186;
+      font-family: "Times New Roman", Times, serif;
+      font-weight: 400;
+    }
+
+    .email-wrap,
+    .course {
+      margin: 10px 0;
+      text-align: center;
+    }
+
+    .email {
+      color: var(--rose-dark);
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+
+    .email:hover,
+    .email:focus-visible {
+      color: #86576f;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .course {
+      font-size: clamp(1rem, 2.1vw, 1.25rem);
+    }
+
+    h2 {
+      margin: 42px 0 24px;
+      text-align: center;
+      font-size: clamp(1.7rem, 3vw, 2.25rem);
+    }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .work-link {
+      display: flex;
+      align-items: center;
+      min-height: 66px;
+      padding: 14px 20px;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid #ecd1de;
+      border-radius: 999px;
+      box-shadow: 0 5px 18px rgba(203, 151, 177, 0.12);
+      text-decoration: none;
+      transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .work-link:hover,
+    .work-link:focus-visible {
+      transform: translateY(-2px);
+      border-color: var(--rose);
+      box-shadow: 0 8px 22px rgba(203, 151, 177, 0.2);
+      outline: none;
+    }
+
+    .number {
+      flex: 0 0 38px;
+      color: var(--rose-dark);
+    }
+
+    .flower-corner {
+      position: absolute;
+      bottom: 20px;
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      color: #cf91af;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .flower-corner.left {
+      left: 22px;
+    }
+
+    .flower-corner.right {
+      right: 22px;
+      transform: scaleX(-1);
+    }
+
+    .flower-corner span:nth-child(1) {
+      font-size: 24px;
+      transform: translateY(4px);
+    }
+
+    .flower-corner span:nth-child(2) {
+      font-size: 34px;
+    }
+
+    .flower-corner span:nth-child(3) {
+      font-size: 27px;
+      transform: translateY(2px);
+    }
+
+    @media (max-width: 700px) {
+      .inner-border {
+        min-height: calc(100vh - 32px);
+      }
+
+      .work-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .work-link {
+        min-height: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="outer-border">
+    <section class="inner-border">
+      <header class="site-header">
+        <h1>A.I. FOR DESIGNERS — <span class="name">Wahida Irina</span></h1>
+
+        <p class="email-wrap">
+          <a class="email" href="mailto:wahida.irina@baruch.cuny.edu">wahida.irina@baruch.cuny.edu</a>
+        </p>
+
+        <p class="course">ART 3041 · <span class="semester">Fall 2026</span></p>
+      </header>
+
+      <h2>✿ Work ✿</h2>
+
+      <nav class="work-grid" aria-label="Course work">
+        <a class="work-link" href="#"><span class="number">01</span><span>Custom Instructions</span></a>
+        <a class="work-link" href="#"><span class="number">05</span><span>Become a Crea(i)tive Director</span></a>
+        <a class="work-link" href="#"><span class="number">02</span><span>A Style Guide for Your AI</span></a>
+        <a class="work-link" href="#"><span class="number">06</span><span>Experimental AI Interface</span></a>
+        <a class="work-link" href="#"><span class="number">03</span><span>Design a ___</span></a>
+        <a class="work-link" href="#"><span class="number">07</span><span>Open</span></a>
+        <a class="work-link" href="chair.html"><span class="number">04</span><span>Chair Sequence</span></a>
+      </nav>
+
+      <div class="flower-corner left" aria-hidden="true"><span>✿</span><span>✿</span><span>✿</span></div>
+      <div class="flower-corner right" aria-hidden="true"><span>✿</span><span>✿</span><span>✿</span></div>
+    </section>
+  </main>
+</body>
+</html>
