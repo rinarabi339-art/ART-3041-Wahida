@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Commute Story Sequence</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #ffffff;
+      color: #222;
+    }
+    header {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 24px 28px;
+    }
+    h1 { margin: 0 0 10px; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 500; }
+    header p { margin: 0; color: #555555; font-size: 1rem; }
+    .grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 56px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 28px;
+    }
+    figure { margin: 0; }
+    img {
+      width: 100%;
+      display: block;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      background: rgba(255,255,255,.3);
+      border-radius: 3px;
+    }
+    figcaption { padding: 12px 2px 0; font-size: .95rem; color: #555555; }
+    @media (max-width: 700px) {
+      .grid { grid-template-columns: 1fr; gap: 24px; }
+      header { padding-top: 32px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Commute Story Sequence</h1>
+    <p>A visual sequence from the commute.</p>
+  </header>
+  <main class="grid">
+    <figure><img src="images/commute1.png" alt="Commute scene 1" loading="lazy" /><figcaption>Commute 1</figcaption></figure>
+    <figure><img src="images/commute2.jpeg" alt="Commute scene 2" loading="lazy" /><figcaption>Commute 2</figcaption></figure>
+    <figure><img src="images/commute3.png" alt="Commute scene 3" loading="lazy" /><figcaption>Commute 3</figcaption></figure>
+    <figure><img src="images/commute4.png" alt="Commute scene 4" loading="lazy" /><figcaption>Commute 4</figcaption></figure>
+  </main>
+</body>
+</html>
