@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Semicircle Poster Generator</title>
+<style>
+:root{--bg:#111013;--panel:#1b191d;--line:#343137;--muted:#99939f;--text:#f4f2f0}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}body{font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+.app{height:100vh;display:grid;grid-template-columns:310px minmax(520px,1fr) 350px;overflow:hidden}
+.panel{height:100vh;overflow-y:auto;overflow-x:hidden;background:var(--panel);padding:18px 18px 30px;border-right:1px solid var(--line);scrollbar-width:thin;scrollbar-color:#555 var(--panel)}
+.panel.right{border-right:0;border-left:1px solid var(--line);background:#18171a}.panel::-webkit-scrollbar{width:8px}.panel::-webkit-scrollbar-thumb{background:#4a474d;border-radius:8px}
+.stage{height:100vh;min-width:0;display:flex;align-items:center;justify-content:center;background:#29272b;overflow:hidden;position:relative;padding:22px}
+.poster-wrap{width:min(66vh,650px);aspect-ratio:850/1100;flex:0 0 auto;box-shadow:0 22px 70px rgba(0,0,0,.45);background:#eee;position:relative}
+#poster{width:100%;height:100%;display:block;touch-action:none}.stage-note{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#8d8990;white-space:nowrap;pointer-events:none}
+h1{font-size:15px;margin:0 0 3px;letter-spacing:.04em;text-transform:uppercase}header{margin-bottom:18px}header p{margin:0;color:var(--muted);font-size:10px;line-height:1.4}.section{border-top:1px solid var(--line);padding-top:15px;margin-top:16px}.section:first-of-type{border-top:0;padding-top:0;margin-top:0}
+h2{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:#aaa5ad;margin:0 0 11px}label{display:block;font-size:10px;font-weight:700;color:#bbb6be;margin:11px 0 5px}
+input,textarea,select{width:100%;border:1px solid #3a373d;background:#121114;color:#f4f2f0;border-radius:5px;padding:9px 10px;font:inherit;font-size:12px;outline:none}textarea{min-height:105px;resize:vertical;line-height:1.35}input:focus,textarea:focus,select:focus{border-color:#8e8993}input[type=color]{padding:2px;height:38px;cursor:pointer}
+.range-row{display:grid;grid-template-columns:1fr 52px;gap:8px;align-items:center}.range-row input[type=range]{padding:0}.range-value{border:1px solid #3a373d;background:#121114;border-radius:4px;padding:7px 4px;text-align:center;font-size:10px;color:#ddd}
+button{width:100%;border:1px solid #eee;background:#eee;color:#111;padding:10px 12px;border-radius:5px;font-weight:800;cursor:pointer;margin-top:8px;font-size:11px;letter-spacing:.03em}button.secondary{background:transparent;color:#eee;border-color:#454149}button:hover{filter:brightness(.94)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.mini{font-size:9px;color:#7f7a83;margin-top:5px}.palette{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}.palette span{font-size:9px;color:#aaa}.swatches{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}.swatch{width:26px;height:26px;border-radius:50%;border:1px solid #555;cursor:pointer}.swatch:hover{outline:2px solid #aaa;outline-offset:1px}
+.layers{display:flex;flex-direction:column;gap:6px}.layer{display:grid;grid-template-columns:25px 1fr auto;gap:7px;align-items:center;border:1px solid #353239;background:#141316;padding:7px;border-radius:5px;cursor:pointer}.layer.active{border-color:#a9a3ad;background:#252228}.layer .dot{width:18px;height:18px;border-radius:50%;border:1px solid #777}.layer b{font-size:10px}.layer small{display:block;color:#777;font-size:8px;margin-top:2px}.layer-actions button{width:auto;padding:4px 6px;margin:0;font-size:9px}.checks{display:grid;grid-template-columns:1fr 1fr;gap:7px}.check{display:flex;align-items:center;gap:6px;font-weight:400;margin:0;color:#aaa}.check input{width:auto}.hint{font-size:9px;line-height:1.5;color:#777;padding:9px;border:1px solid #343137;background:#151417;border-radius:5px}.group-buttons button{font-size:9px;padding:8px 5px;margin-top:0}.selected-name{font-size:11px;color:#eee;margin-bottom:6px}
+@media(max-width:1050px){.app{grid-template-columns:275px minmax(430px,1fr)}.panel.right{position:absolute;right:0;top:0;width:350px;z-index:5;transform:translateX(100%);transition:transform .2s}.panel.right.open{transform:translateX(0)}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="panel">
+<header><h1>Semicircle Poster Lab</h1><p>Built from the Beethoven reference: cropped semicircular bands, concentric rhythm, asymmetry, strong contrast and small information typography.</p></header>
+<div class="section"><h2>Poster Content</h2>
+<label>Main title</label><input id="title" value="beethoven">
+<label>Information block</label><textarea id="meta">tonhalle grosser saal
+dienstag, den 22. februar 1955,
+20.15 uhr
+4. extrakonzert
+der tonhalle-gesellschaft
+
+leitung  carl schuricht
+solist  wolfgang schneiderhan
+
+beethoven  ouverture zu „coriolan“, op. 62
+violinkonzert in d-dur, op. 61
+siebente sinfonie in a-dur, op. 92
+
+vorverkauf
+tonhalle-kasse, hug, jecklin, kuoni
+karten zu fr. 3.50 bis 9.50</textarea>
+<label>Tiny footer</label><input id="footer" value="modernist poster study">
+</div>
+<div class="section"><h2>Variation Generator</h2>
+<label>Variation strength</label><div class="range-row"><input id="vstrength" type="range" min="0" max="100" value="65"><div class="range-value" id="vstrengthv">65%</div></div>
+<label>Number of semicircles</label><div class="range-row"><input id="vcount" type="range" min="2" max="9" value="5"><div class="range-value" id="vcountv">5</div></div>
+<label>Composition spread</label><div class="range-row"><input id="vspread" type="range" min="20" max="180" value="95"><div class="range-value" id="vspreadv">95</div></div>
+<label>Crop / edge tension</label><div class="range-row"><input id="vcrop" type="range" min="0" max="100" value="72"><div class="range-value" id="vcropv">72%</div></div>
+<label>Asymmetry</label><div class="range-row"><input id="vasym" type="range" min="0" max="100" value="70"><div class="range-value" id="vasymv">70%</div></div>
+<label>Composition family</label><select id="varch"><option value="auto">Surprise me (always a different one)</option><option value="vinyl">Vinyl field</option><option value="arches">Arches</option><option value="eccentric">Eccentric rings</option><option value="fan">Fan dial</option><option value="hills">Half-disc skyline</option></select>
+<button id="random">Generate variation</button><button id="randomAgain" class="secondary">Generate another</button>
+<div class="mini" id="vname">Composition: Reference</div>
+<div class="mini">The generator never introduces triangles, squares or other shapes. Every variation is made only from semicircular bands.</div>
+</div>
+<div class="section"><h2>Quick Presets</h2><div class="grid2"><button class="secondary preset" data-preset="reference">Reference</button><button class="secondary preset" data-preset="dense">Dense rhythm</button><button class="secondary preset" data-preset="open">Open space</button><button class="secondary preset" data-preset="crop">Heavy crop</button></div></div>
+<div class="section"><h2>Export</h2><button id="downloadSvg">Download SVG</button><button id="downloadPng" class="secondary">Download PNG</button></div>
+</aside>
+<main class="stage"><div class="poster-wrap"><svg id="poster" viewBox="0 0 850 1100" xmlns="http://www.w3.org/2000/svg"></svg></div><div class="stage-note">poster fixed · side controls scroll</div></main>
+<aside class="panel right">
+<header><h1>Edit</h1><p>Fine-tune the selected semicircle and typography. The poster stays fixed while this panel scrolls.</p></header>
+<div class="section"><h2>Custom Color Palette</h2><div class="palette"><div><span>Background</span><input id="bgColor" type="color" value="#ecebea"></div><div><span>Primary</span><input id="inkColor" type="color" value="#080808"></div><div><span>Accent</span><input id="accentColor" type="color" value="#080808"></div></div>
+<label>Palette presets</label><div class="swatches"><span class="swatch" style="background:#ecebea" data-bg="#ecebea" data-ink="#080808" data-accent="#080808"></span><span class="swatch" style="background:#111" data-bg="#111111" data-ink="#f3f0eb" data-accent="#f3f0eb"></span><span class="swatch" style="background:#e8e0d2" data-bg="#e8e0d2" data-ink="#201d1b" data-accent="#b34d42"></span><span class="swatch" style="background:#e6e9e3" data-bg="#e6e9e3" data-ink="#182019" data-accent="#637c67"></span><span class="swatch" style="background:#e7e1eb" data-bg="#e7e1eb" data-ink="#1e1924" data-accent="#765f8d"></span></div></div>
+<div class="section"><h2>Semi-circle Layers</h2><div id="layers" class="layers"></div><button id="addLayer" class="secondary">+ Add semicircle</button></div>
+<div class="section"><h2>All Semicircles — Group Transform</h2>
+<div class="hint">Move, rotate, or place the whole semicircle composition at once. Text stays independent.</div>
+<label>Move left / right</label><div class="range-row"><input id="gx" type="range" min="-400" max="400" value="0"><div class="range-value" id="gxv">0</div></div>
+<label>Move up / down</label><div class="range-row"><input id="gy" type="range" min="-400" max="400" value="0"><div class="range-value" id="gyv">0</div></div>
+<label>Group rotation</label><div class="range-row"><input id="grot" type="range" min="-180" max="180" value="0"><div class="range-value" id="grotv">0°</div></div>
+<label>Quick corner / side placement</label>
+<div class="grid2 group-buttons">
+<button class="secondary group-pos" data-pos="tl">↖ Top Left</button><button class="secondary group-pos" data-pos="tr">↗ Top Right</button>
+<button class="secondary group-pos" data-pos="bl">↙ Bottom Left</button><button class="secondary group-pos" data-pos="br">↘ Bottom Right</button>
+<button class="secondary group-pos" data-pos="left">← Left</button><button class="secondary group-pos" data-pos="right">Right →</button>
+<button class="secondary group-pos" data-pos="top">↑ Top</button><button class="secondary group-pos" data-pos="bottom">↓ Bottom</button>
+</div>
+<button id="groupReset" class="secondary">Reset group position</button>
+</div>
+<div class="section"><h2>Selected Semi-circle</h2><div class="selected-name" id="selectedName">Semicircle 1</div>
+<label>X position</label><div class="range-row"><input id="lx" type="range" min="-500" max="1200" value="610"><div class="range-value" id="lxv">610</div></div>
+<label>Y position</label><div class="range-row"><input id="ly" type="range" min="-500" max="1500" value="690"><div class="range-value" id="lyv">690</div></div>
+<label>Radius / size</label><div class="range-row"><input id="lr" type="range" min="1" max="1000" value="500"><div class="range-value" id="lrv">500</div></div>
+<label>Band thickness</label><div class="range-row"><input id="lt" type="range" min="1" max="450" value="78"><div class="range-value" id="ltv">78</div></div>
+<label>Start angle</label><div class="range-row"><input id="ls" type="range" min="-360" max="360" value="-112"><div class="range-value" id="lsv">-112°</div></div>
+<label>End angle</label><div class="range-row"><input id="le" type="range" min="-360" max="720" value="96"><div class="range-value" id="lev">96°</div></div>
+<label>Rotation</label><div class="range-row"><input id="lrot" type="range" min="-180" max="180" value="0"><div class="range-value" id="lrotv">0°</div></div>
+<label>Opacity</label><div class="range-row"><input id="lop" type="range" min="10" max="100" value="100"><div class="range-value" id="lopv">100%</div></div>
+<div class="grid2"><div><label>Fill</label><input id="lfill" type="color" value="#080808"></div><div><label>Stroke</label><input id="lstroke" type="color" value="#ecebea"></div></div>
+<label>Stroke width</label><div class="range-row"><input id="lsw" type="range" min="0" max="12" value="2"><div class="range-value" id="lswv">2</div></div>
+<div class="grid2"><button id="duplicate">Duplicate</button><button id="delete" class="secondary">Delete</button></div>
+</div>
+<div class="section"><h2>Typography</h2>
+<label>Title size</label><div class="range-row"><input id="titleSize" type="range" min="18" max="90" value="39"><div class="range-value" id="titleSizev">39</div></div>
+<label>Title X</label><div class="range-row"><input id="titleX" type="range" min="20" max="780" value="42"><div class="range-value" id="titleXv">42</div></div>
+<label>Title Y</label><div class="range-row"><input id="titleY" type="range" min="80" max="1050" value="690"><div class="range-value" id="titleYv">690</div></div>
+<label>Information size</label><div class="range-row"><input id="infoSize" type="range" min="6" max="28" value="11"><div class="range-value" id="infoSizev">11</div></div>
+<label>Information X</label><div class="range-row"><input id="infoX" type="range" min="20" max="780" value="180"><div class="range-value" id="infoXv">180</div></div>
+<label>Information Y</label><div class="range-row"><input id="infoY" type="range" min="120" max="1050" value="760"><div class="range-value" id="infoYv">760</div></div>
+<label>Align</label><select id="align"><option value="start">Left</option><option value="middle">Center</option><option value="end">Right</option></select>
+<label>Indent</label><div class="range-row"><input id="indent" type="range" min="0" max="180" value="0"><div class="range-value" id="indentv">0</div></div>
+<label>Line spacing</label><div class="range-row"><input id="leading" type="range" min="8" max="30" value="15"><div class="range-value" id="leadingv">15</div></div>
+<div class="checks"><label class="check"><input id="uppercase" type="checkbox"> uppercase title</label><label class="check"><input id="bold" type="checkbox" checked> bold title</label></div>
+</div>
+<div class="section"><div class="hint"><b>Visual rule:</b> only semicircular / circular bands. Variations can crop, overlap, rotate and change rhythm, but they stay within the reference poster's visual grammar.</div></div>
+</aside></div>
+<script>
+const $=id=>document.getElementById(id),poster=$("poster");
+let layers=[
+{id:1,x:610,y:690,r:500,t:78,s:-112,e:96,rot:0,op:100,fill:'#080808',stroke:'#ecebea',sw:2},
+{id:2,x:610,y:690,r:380,t:72,s:-92,e:84,rot:0,op:100,fill:'#080808',stroke:'#ecebea',sw:2},
+{id:3,x:610,y:690,r:275,t:48,s:-72,e:70,rot:0,op:100,fill:'#080808',stroke:'#ecebea',sw:2},
+{id:4,x:610,y:690,r:190,t:35,s:-48,e:58,rot:0,op:100,fill:'#080808',stroke:'#ecebea',sw:2},
+{id:5,x:610,y:690,r:125,t:22,s:-32,e:42,rot:0,op:100,fill:'#080808',stroke:'#ecebea',sw:2}];
+let selected=1,nextId=6;
+function seeded(seed){let h=0;for(let i=0;i<seed.length;i++)h=(h*31+seed.charCodeAt(i))>>>0;return()=>{h=(1664525*h+1013904223)>>>0;return h/4294967296}}
+function polar(cx,cy,r,a){let q=(a-90)*Math.PI/180;return[cx+r*Math.cos(q),cy+r*Math.sin(q)]}
+function bandPath(L){let a1=L.s+L.rot,a2=L.e+L.rot,r1=Math.max(1,L.r),r2=Math.max(1,L.r+L.t),p1=polar(L.x,L.y,r2,a1),p2=polar(L.x,L.y,r2,a2),p3=polar(L.x,L.y,r1,a2),p4=polar(L.x,L.y,r1,a1),delta=Math.abs(a2-a1),large=delta>180?1:0,sweep=a2>a1?1:0;return`M ${p1[0]} ${p1[1]} A ${r2} ${r2} 0 ${large} ${sweep} ${p2[0]} ${p2[1]} L ${p3[0]} ${p3[1]} A ${r1} ${r1} 0 ${large} ${sweep?0:1} ${p4[0]} ${p4[1]} Z`}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[m]))}
+function render(){const bg=$("bgColor").value,ink=$("inkColor").value,accent=$("accentColor").value,title=esc($("title").value),info=esc($("meta").value).split('\n'),footer=esc($("footer").value);let out=`<rect width="850" height="1100" fill="${bg}"/>`;const gx=+$('gx').value,gy=+$('gy').value,grot=+$('grot').value;out+=`<g transform="translate(${gx} ${gy}) rotate(${grot} 610 690)">`;layers.forEach(L=>out+=`<path data-layer="${L.id}" d="${bandPath(L)}" fill="${esc(L.fill)}" stroke="${esc(L.stroke)}" stroke-width="${L.sw}" opacity="${L.op/100}"/>`);out+='</g>';const ts=+$('titleSize').value,tx=+$('titleX').value,ty=+$('titleY').value,ix=+$('infoX').value,iy=+$('infoY').value,is=+$('infoSize').value,leading=+$('leading').value,indent=+$('indent').value,align=$("align").value;const titleText=$("uppercase").checked?title.toUpperCase():title;out+=`<g fill="${ink}" font-family="Arial,Helvetica,sans-serif"><text x="${tx}" y="${ty}" font-size="${ts}" font-weight="${$("bold").checked?'700':'400'}" text-anchor="start" letter-spacing="-1.1">${titleText}</text><g font-size="${is}" font-weight="400" text-anchor="${align}">`;info.forEach((line,i)=>{let x=ix+(align==='start'?indent:align==='end'?-indent:0);out+=`<text x="${x}" y="${iy+i*leading}">${line||' '}</text>`});out+=`</g><text x="800" y="1010" text-anchor="end" font-size="7" transform="rotate(-90 800 1010)" fill="${accent}">${footer}</text></g>`;poster.innerHTML=out;updateLayers()}
+function updateLayers(){const el=$("layers");el.innerHTML=layers.map((L,i)=>`<div class="layer ${L.id===selected?'active':''}" data-id="${L.id}"><span class="dot" style="background:${L.fill}"></span><div><b>${L.name||'Semicircle '+(i+1)}</b><small>R ${Math.round(L.r)} · thickness ${Math.round(L.t)} · ${Math.round(L.s)}° → ${Math.round(L.e)}°</small></div><div class="layer-actions"><button class="up" data-id="${L.id}">↑</button><button class="down" data-id="${L.id}">↓</button></div></div>`).join('');el.querySelectorAll('.layer').forEach(x=>x.onclick=e=>{if(e.target.tagName==='BUTTON')return;selected=+x.dataset.id;loadSelected()});el.querySelectorAll('.up').forEach(b=>b.onclick=e=>moveLayer(+b.dataset.id,-1));el.querySelectorAll('.down').forEach(b=>b.onclick=e=>moveLayer(+b.dataset.id,1))}
+function moveLayer(id,dir){let i=layers.findIndex(x=>x.id===id),j=i+dir;if(j<0||j>=layers.length)return;[layers[i],layers[j]]=[layers[j],layers[i]];render()}
+const map={lx:'x',ly:'y',lr:'r',lt:'t',ls:'s',le:'e',lrot:'rot',lop:'op',lfill:'fill',lstroke:'stroke',lsw:'sw'};
+function loadSelected(){let L=layers.find(x=>x.id===selected)||layers[0];selected=L.id;$("selectedName").textContent=L.name||'Semicircle '+(layers.indexOf(L)+1);for(const [id,k] of Object.entries(map)){$(id).value=L[k];if($(id+'v'))$(id+'v').textContent=['s','e','rot'].includes(k)?L[k]+'°':k==='op'?L[k]+'%':L[k]}}
+function editSelected(id){let L=layers.find(x=>x.id===selected);if(!L)return;let k=map[id];L[k]=(id==='lfill'||id==='lstroke')?$(id).value:+$(id).value;updateRangeLabels();render()}
+function updateRangeLabels(){const vals=[['vstrength','%'],['vcount',''],['gx',''],['gy',''],['grot','°'],['vspread',''],['vcrop','%'],['vasym','%'],['lx',''],['ly',''],['lr',''],['lt',''],['ls','°'],['le','°'],['lrot','°'],['lop','%'],['lsw',''],['titleSize',''],['titleX',''],['titleY',''],['infoSize',''],['infoX',''],['infoY',''],['indent',''],['leading','']];vals.forEach(([id,s])=>{if($(id)&&$(id+'v'))$(id+'v').textContent=$(id).value+s})}
+function sync(){updateRangeLabels();render()}
+Object.keys(map).forEach(id=>$(id).addEventListener('input',()=>editSelected(id)));
+['bgColor','inkColor','accentColor','title','meta','footer','titleSize','titleX','titleY','infoSize','infoX','infoY','indent','leading'].forEach(id=>$(id).addEventListener('input',sync));['align','uppercase','bold'].forEach(id=>$(id).addEventListener('change',sync));['vstrength','vcount','vspread','vcrop','vasym'].forEach(id=>$(id).addEventListener('input',updateRangeLabels));
+$("addLayer").onclick=()=>{let base=layers[layers.length-1]||{x:610,y:690,r:120,t:25,s:-30,e:45,rot:0,op:100,fill:$("inkColor").value,stroke:$("bgColor").value,sw:2};let L={...base,id:nextId++,r:Math.max(70,base.r-55),t:Math.max(12,base.t*.85),s:base.s+7,e:base.e-5};layers.push(L);selected=L.id;render();loadSelected()};
+$("duplicate").onclick=()=>{let L=layers.find(x=>x.id===selected);if(!L)return;let N={...L,id:nextId++,x:L.x+18,y:L.y-12,r:L.r+8};layers.push(N);selected=N.id;render();loadSelected()};
+$("delete").onclick=()=>{if(layers.length<=1)return;layers=layers.filter(x=>x.id!==selected);selected=layers[0].id;render();loadSelected()};
+function syncGroup(){updateRangeLabels();render();loadSelected()}
+['gx','gy','grot'].forEach(id=>$(id).addEventListener('input',syncGroup));
+function setGroupPosition(pos){const values={tl:[-220,-280],tr:[170,-240],bl:[-220,210],br:[180,220],left:[-250,0],right:[230,0],top:[0,-270],bottom:[0,250]};const v=values[pos]||[0,0];$('gx').value=v[0];$('gy').value=v[1];syncGroup()}
+document.querySelectorAll('.group-pos').forEach(b=>b.onclick=()=>setGroupPosition(b.dataset.pos));
+$('groupReset').onclick=()=>{$('gx').value=0;$('gy').value=0;$('grot').value=0;syncGroup()};
+
+/* ===================== VARIATION ENGINE =====================
+   Five composition families. Each builds its own geometry from scratch
+   (different structure, centre logic, figure/ground and rhythm), so a new
+   variation is a different poster, not the same bands rearranged.
+   Everything is still made only of circular bands / sectors. */
+const PW=850,PH=1100;
+const ARCHS=[['vinyl','Vinyl field'],['arches','Arches'],['eccentric','Eccentric rings'],['fan','Fan dial'],['hills','Half-disc skyline']];
+const PALS=[
+{bg:'#ecebea',ink:'#080808',accent:'#080808'},
+{bg:'#e8e7e2',ink:'#111111',accent:'#c8372d'},
+{bg:'#f0e8d9',ink:'#201e1a',accent:'#a84e3e'},
+{bg:'#dce7eb',ink:'#14272d',accent:'#3f7888'},
+{bg:'#e7e9e3',ink:'#18221d',accent:'#647c6d'},
+{bg:'#f3efe6',ink:'#1d2a5a',accent:'#e4572e'},
+{bg:'#171719',ink:'#f0eee8',accent:'#d9a441'},
+{bg:'#111111',ink:'#f3f0eb',accent:'#f3f0eb'},
+{bg:'#e6e1ec',ink:'#1e1924',accent:'#765f8d'}];
+let lastArch=null,lastPal=-1;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const mk=o=>Object.assign({id:nextId++,name:'',x:0,y:0,r:100,t:30,s:-90,e:90,rot:0,op:100,fill:'#000',stroke:'#fff',sw:0},o);
+const angTo=(a,b)=>Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI+90;
+function rectDist(px,py,r){const dx=Math.max(r.x0-px,0,px-r.x1),dy=Math.max(r.y0-py,0,py-r.y1);return Math.hypot(dx,dy)}
+
+// Text block layout: returns title/info anchors and the rectangle the copy occupies.
+function layoutBlock(corner,ctx){
+  const {ts,is,lead,off}=ctx,mx=60;
+  const lines=$('meta').value.split('\n'),maxLen=Math.max(10,...lines.map(l=>l.length));
+  const infoW=maxLen*is*0.52,titleW=Math.max(3,$('title').value.length)*ts*0.55;
+  const bw=Math.max(titleW,off+infoW),gap=Math.round(ts*0.35+28),bh=gap+(lines.length-1)*lead;
+  const xL=corner.includes('l')?mx:PW-mx-bw;
+  let ty;
+  if(corner[0]==='t')ty=Math.max(96,70+ts*0.85);else ty=PH-72-bh;
+  return{tx:xL,ty,ix:xL+off,iy:ty+gap,rect:{x0:xL-8,y0:ty-ts*0.9,x1:xL+bw+8,y1:ty+bh+8}};
+}
+// Cut a band down to its longest run that does not touch the text rectangle.
+function trimLayer(L,rect){
+  const pad=12,x0=rect.x0-pad,x1=rect.x1+pad,y0=rect.y0-pad,y1=rect.y1+pad;
+  const steps=Math.max(1,Math.ceil(L.t/36)),radii=[];
+  for(let k=0;k<=steps;k++)radii.push(L.r+L.t*k/steps);
+  const runs=[];let cur=null;
+  for(let a=L.s;a<=L.e+0.001;a+=1.5){
+    let hit=false;
+    for(const r of radii){const p=polar(L.x,L.y,r,a);if(p[0]>x0&&p[0]<x1&&p[1]>y0&&p[1]<y1){hit=true;break}}
+    if(hit){if(cur){runs.push(cur);cur=null}}else if(cur)cur[1]=a;else cur=[a,a];
+  }
+  if(cur)runs.push(cur);
+  if(!runs.length)return false;
+  runs.sort((p,q)=>(q[1]-q[0])-(p[1]-p[0]));
+  const b=runs[0];if(b[1]-b[0]<6)return false;
+  L.s=b[0];L.e=(b[1]>=L.e-1.5)?L.e:b[1];return true;
+}
+// Nested radial slots from rOut inward: thick-to-thin rhythm filling [rIn,rOut] exactly.
+function stack(ctx,rOut,rIn,n,taper){
+  const {R,s,sp}=ctx,items=[];let sum=0;
+  for(let i=0;i<n;i++){const f=1-taper*i/Math.max(1,n-1),t=R(0.55,1.35+s*1.1)*f,g=R(0.35,0.9)+sp/180*0.7;items.push({t,g});sum+=t+g}
+  sum-=items[n-1].g;
+  const k=(rOut-rIn)/sum;let r=rOut;
+  return items.map(it=>{const t=it.t*k,o={r:r-t,t,gap:it.g*k};r-=t+it.g*k;return o});
+}
+const ORI={0:{ac:0,corners:['tl','tr']},180:{ac:180,corners:['bl','br']},90:{ac:90,corners:['tr','br']},270:{ac:270,corners:['tl','bl']}};
+function edgeCentre(o,t,off){return o===0?{x:t,y:PH+off}:o===180?{x:t,y:-off}:o===90?{x:-off,y:t}:{x:PW+off,y:t}}
+function edgeExtent(o,C,rc){return o===0?C.y-rc.y1-26:o===180?rc.y0-C.y-26:o===90?rc.x0-C.x-26:C.x-rc.x1-26}
+
+const GEN={
+// 1. Figure/ground: big paper disc cut out of an ink wedge, bands orbiting an off-centre hub, copy sits in the open gap.
+vinyl(ctx){
+  const {R,pick,pal,n,sp,c,a,s}=ctx;
+  const corner=pick(['bl','bl','br','tl','tr']),B=layoutBlock(corner,ctx),rc=B.rect;
+  const left=corner.includes('l'),top=corner[0]==='t';
+  const C={x:(left?rc.x1+R(50,150):rc.x0-R(50,150))+(ctx.rng()-.5)*60*a,y:top?rc.y1-R(-10,90):rc.y0+R(-10,90)};
+  let far=0;[[rc.x0,rc.y0],[rc.x1,rc.y0],[rc.x0,rc.y1],[rc.x1,rc.y1]].forEach(p=>far=Math.max(far,Math.hypot(p[0]-C.x,p[1]-C.y)));
+  const D=(far+R(40,110))*(1+c*0.18),thc=angTo(C,{x:(rc.x0+rc.x1)/2,y:(rc.y0+rc.y1)/2})+180;
+  const fspan=R(150,250),fa=thc-fspan/2+R(-35,35)*a,fieldFill=ctx.chance(.3)?pal.accent:pal.ink,out=[];
+  out.push(mk({name:'Field',struct:true,x:C.x,y:C.y,r:1,t:2600,s:fa,e:fa+fspan,fill:fieldFill,stroke:fieldFill}));
+  out.push(mk({name:'Disc',struct:true,x:C.x,y:C.y,r:1,t:D-1,s:-180,e:179.9,fill:pal.bg,stroke:pal.bg}));
+  const st=stack(ctx,D-R(18,40),R(60,110),n,.55),step=R(-14,14)*(.4+s)+R(-10,10)*a;
+  st.forEach((b,i)=>{
+    const span=clamp(R(150,270)-i*R(0,14),70,300),sh=i*step+R(-8,8)*a;
+    out.push(mk({name:'Band '+(i+1),trim:true,x:C.x,y:C.y,r:b.r,t:b.t,s:thc-span/2+sh,e:thc+span/2+sh,fill:(i===n-1&&ctx.chance(.4))?pal.accent:pal.ink,stroke:pal.bg,sw:1.2}));
+  });
+  const hk=Math.floor(R(1,3.99));
+  for(let k=0;k<hk;k++)out.push(mk({name:'Hairline '+(k+1),x:C.x,y:C.y,r:D+R(20,50)+k*R(24,55),t:1.6,s:fa+R(2,14),e:fa+fspan-R(2,14),fill:pal.bg,stroke:pal.bg}));
+  return{layers:out,B};
+},
+// 2. Arches: parallel half-rings stacked off one edge, copy in the opposite corner.
+arches(ctx){
+  const {R,pick,pal,n,sp,c,a}=ctx;
+  const o=pick([0,0,180,90,270]),O=ORI[o],B=layoutBlock(pick(O.corners),ctx);
+  const along=(o===0||o===180)?PW:PH,t=clamp(along*R(.3,.7)+(ctx.rng()-.5)*240*a,120,along-120);
+  const C=edgeCentre(o,t,c*R(0,150)),ext=edgeExtent(o,C,B.rect);
+  const rOut=Math.max(150,Math.min(330+sp*2.3,ext-40)),out=[];
+  const rIn=R(50,130),st=stack(ctx,rOut,rIn,n,.35),acc=Math.floor(R(0,n));
+  st.forEach((b,i)=>{
+    const c1=ctx.rng()<a*.55?R(6,48):0,c2=ctx.rng()<a*.55?R(6,48):0;
+    out.push(mk({name:'Arch '+(i+1),x:C.x,y:C.y,r:b.r,t:b.t,s:O.ac-90+c1,e:O.ac+90-c2,fill:(i===acc&&pal.accent!==pal.ink)?pal.accent:pal.ink,stroke:pal.bg,sw:0}));
+  });
+  if(ctx.chance(.55))out.push(mk({name:'Dome',x:C.x,y:C.y,r:1,t:Math.max(10,rIn-10),s:O.ac-90,e:O.ac+90,fill:ctx.chance(.5)?pal.accent:pal.ink,stroke:pal.bg}));
+  const hk=1+Math.floor(R(0,2));
+  for(let k=0;k<hk;k++)out.push(mk({name:'Echo line '+(k+1),x:C.x,y:C.y,r:rOut+14+k*R(14,26),t:1.6,s:O.ac-90,e:O.ac+90,fill:pal.ink,stroke:pal.bg}));
+  return{layers:out,B};
+},
+// 3. Eccentric rings: nested rings whose centres drift in one direction, like an orbit or a vinyl groove.
+eccentric(ctx){
+  const {R,pick,pal,n,sp,c,a,s}=ctx;
+  const B=layoutBlock(pick(['tl','tr','bl','br']),ctx);
+  const push=c*R(40,260),pa=R(0,360)*Math.PI/180;
+  let cx=R(250,600)+Math.cos(pa)*push,cy=R(330,780)+Math.sin(pa)*push;
+  const rOut=R(280,470)+sp*1.2,st=stack(ctx,rOut,R(40,90),n,.3),dq=R(0,360)*Math.PI/180,th0=R(0,360),out=[];
+  st.forEach((b,i)=>{
+    if(i>0){const d=st[i-1].gap*R(.55,.97);cx+=Math.cos(dq)*d;cy+=Math.sin(dq)*d}
+    let s0=-180,e0=179.9;
+    if(ctx.chance(.55)){const span=R(190,320),mid=th0+i*R(-40,40)*(.5+a);s0=mid-span/2;e0=mid+span/2}
+    out.push(mk({name:'Ring '+(i+1),trim:true,x:cx,y:cy,r:b.r,t:b.t,s:s0,e:e0,fill:(i===n-1&&ctx.chance(.5)&&pal.accent!==pal.ink)||ctx.chance(.12*s)?pal.accent:pal.ink,stroke:pal.bg,sw:1}));
+  });
+  return{layers:out,B};
+},
+// 4. Fan dial: broken rings of rays radiating from a corner, tiers out of phase with each other.
+fan(ctx){
+  const {R,pick,pal,n,sp,c,a}=ctx;
+  const corner=pick(['tl','tr','bl','br']),B=layoutBlock(corner,ctx);
+  const left=corner.includes('l'),top=corner[0]==='t',off=R(-80,60)+c*R(0,140);
+  const O={x:left?PW+off:-off,y:top?PH+off:-off};
+  const thc=angTo(O,{x:PW/2,y:PH/2})+R(-15,15)*a,hw=R(48,70),out=[];
+  const nt=clamp(2+(n>=5?1:0)+(n>=8?1:0),2,4),tiers=[];
+  let r=R(40,120),total=r;
+  for(let j=0;j<nt;j++){const w=R(110,230)*(.8+sp/180*.6),g=R(14,40);tiers.push({ri:r,ro:r+w});r+=w+g;total=r-g}
+  const cap=Math.max(260,rectDist(O.x,O.y,B.rect)-30),k0=Math.min(1,cap/total);
+  const accT=ctx.chance(.7)?Math.floor(R(0,nt)):-1;
+  tiers.forEach((T,j)=>{
+    const ri=T.ri*k0,ro=T.ro*k0,kk=clamp(Math.round(n*R(.7,1.2)),3,8),slot=2*hw/kk,duty=R(.3,.72),ph=R(0,1)*slot;
+    for(let q=-1;q<kk;q++){
+      const s0=Math.max(thc-hw,thc-hw+ph+q*slot),e0=Math.min(thc+hw,thc-hw+ph+q*slot+slot*duty);
+      if(e0-s0<1.5)continue;
+      out.push(mk({name:'Ray '+(j+1)+'.'+(q+2),trim:true,x:O.x,y:O.y,r:ri,t:ro-ri,s:s0,e:e0,fill:(j===accT&&pal.accent!==pal.ink)?pal.accent:pal.ink,stroke:pal.bg}));
+    }
+  });
+  if(ctx.chance(.5))out.push(mk({name:'Core',trim:true,x:O.x,y:O.y,r:1,t:Math.max(12,tiers[0].ri*k0-10),s:thc-hw,e:thc+hw,fill:pal.accent,stroke:pal.bg}));
+  out.push(mk({name:'Rim line',trim:true,x:O.x,y:O.y,r:tiers[nt-1].ro*k0+R(14,30),t:1.6,s:thc-hw,e:thc+hw,fill:pal.ink,stroke:pal.bg}));
+  return{layers:out,B};
+},
+// 5. Skyline: solid half-discs of different sizes standing on one edge, overlapping, with target-like inner rings.
+hills(ctx){
+  const {R,pick,pal,n,c,a}=ctx;
+  const o=pick([0,0,180,90,270]),O=ORI[o],B=layoutBlock(pick(O.corners),ctx);
+  const along=(o===0||o===180)?PW:PH,cnt=Math.max(3,n),off=R(0,40)+c*R(0,80);
+  const ws=Array.from({length:cnt},()=>Math.pow(R(.45,1.6),1+a)),sum=ws.reduce((p,q)=>p+q,0),scale=along*R(1.0,1.2)/sum;
+  const Cref=edgeCentre(o,0,off),ext=Math.max(120,edgeExtent(o,Cref,B.rect));
+  let pos=-along*R(0,.08);const hills=[];
+  ws.forEach((w0,i)=>{const w=w0*scale,r=Math.min(w/2*R(1,1.35),ext);hills.push({t:pos+w/2,r});pos+=w});
+  hills.sort((p,q)=>q.r-p.r);
+  const out=[];
+  hills.forEach((h,i)=>{
+    const C=edgeCentre(o,h.t,off),fill=(pal.accent!==pal.ink&&i%2===1)?pal.accent:pal.ink;
+    out.push(mk({name:'Hill '+(i+1),x:C.x,y:C.y,r:1,t:h.r,s:O.ac-90,e:O.ac+90,fill,stroke:pal.bg,sw:3}));
+    if(h.r>110&&ctx.chance(.6)){
+      const rr=h.r*R(.45,.72);
+      out.push(mk({name:'Hill '+(i+1)+' ring',x:C.x,y:C.y,r:rr,t:ctx.chance(.5)?R(3,9):1.6,s:O.ac-90,e:O.ac+90,fill:pal.bg,stroke:pal.bg}));
+    }
+  });
+  return{layers:out,B};
+}};
+
+function variation(){
+  const rng=seeded(Date.now().toString()+Math.random());
+  const R=(a,b)=>a+rng()*(b-a),pick=arr=>arr[Math.floor(rng()*arr.length)],chance=p=>rng()<p;
+  const s=+$('vstrength').value/100,n=Math.max(2,+$('vcount').value),sp=+$('vspread').value,c=+$('vcrop').value/100,a=+$('vasym').value/100;
+  // palette: never repeat the previous one
+  let pi;do{pi=Math.floor(rng()*PALS.length)}while(pi===lastPal&&PALS.length>1);lastPal=pi;const pal=PALS[pi];
+  $('bgColor').value=pal.bg;$('inkColor').value=pal.ink;$('accentColor').value=pal.accent;
+  // composition family: never repeat the previous one (unless the user locks one)
+  let key=$('varch').value;
+  if(key==='auto'){const pool=ARCHS.filter(x=>x[0]!==lastArch);key=pick(pool)[0]}
+  lastArch=key;
+  // typography
+  const ts=Math.round(R(28,50)+s*6),is=Math.round(R(10,12.4)),lead=Math.round(is*R(1.38,1.5)),off=chance(.5)?Math.round(R(56,120)):0;
+  const ctx={rng,R,pick,chance,pal,n,sp,c,a,s,ts,is,lead,off};
+  const res=GEN[key](ctx);
+  // fold rotation, normalise angles, trim bands that would run through the copy
+  const kept=[];
+  res.layers.forEach(L=>{
+    const k=Math.floor((L.s+180)/360);L.s-=360*k;L.e-=360*k;
+    if(L.trim&&!trimLayer(L,res.B.rect))return;
+    delete L.trim;kept.push(L);
+  });
+  layers=kept.length?kept:res.layers;
+  const sel=layers.find(L=>!L.struct)||layers[0];selected=sel.id;
+  $('titleSize').value=ts;$('titleX').value=Math.round(res.B.tx);$('titleY').value=Math.round(res.B.ty);
+  $('infoSize').value=is;$('infoX').value=Math.round(res.B.ix);$('infoY').value=Math.round(res.B.iy);
+  $('leading').value=lead;$('indent').value=0;$('align').value='start';
+  $('bold').checked=chance(.6);$('uppercase').checked=chance(.22);
+  $('gx').value=0;$('gy').value=0;$('grot').value=0;
+  const nm=ARCHS.find(x=>x[0]===key)[1];
+  $('vname').textContent='Composition: '+nm;
+  render();loadSelected();updateRangeLabels();
+}
+$("random").onclick=variation;
+$("randomAgain").onclick=variation;
+
+const presets={reference:{count:5,str:35,spread:90,crop:60,asym:55},dense:{count:8,str:80,spread:120,crop:75,asym:75},open:{count:4,str:45,spread:170,crop:30,asym:60},crop:{count:6,str:90,spread:130,crop:100,asym:90}};document.querySelectorAll('.preset').forEach(b=>b.onclick=()=>{let p=presets[b.dataset.preset];$('vcount').value=p.count;$('vstrength').value=p.str;$('vspread').value=p.spread;$('vcrop').value=p.crop;$('vasym').value=p.asym;updateRangeLabels();variation()});
+document.querySelectorAll('.swatch').forEach(s=>s.onclick=()=>{const ob=$('bgColor').value.toLowerCase(),oi=$('inkColor').value.toLowerCase(),oa=$('accentColor').value.toLowerCase(),nb=s.dataset.bg,ni=s.dataset.ink,na=s.dataset.accent;const m=c=>{c=String(c).toLowerCase();return c===ob?nb:c===oi?ni:c===oa?na:c};layers.forEach(L=>{L.fill=m(L.fill);L.stroke=m(L.stroke)});$('bgColor').value=nb;$('inkColor').value=ni;$('accentColor').value=na;render();loadSelected()});
+function drag(e){let target=e.target.closest('[data-layer]');if(!target)return;selected=+target.dataset.layer;let pt=poster.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;let p=pt.matrixTransform(poster.getScreenCTM().inverse()),L=layers.find(x=>x.id===selected),sx=p.x,sy=p.y,ox=L.x,oy=L.y;loadSelected();function move(ev){let q=poster.createSVGPoint();q.x=ev.clientX;q.y=ev.clientY;q=q.matrixTransform(poster.getScreenCTM().inverse());L.x=ox+q.x-sx;L.y=oy+q.y-sy;render();loadSelected()}function up(){window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',up)}window.addEventListener('pointermove',move);window.addEventListener('pointerup',up)}poster.addEventListener('pointerdown',drag);
+$("downloadSvg").onclick=()=>{let blob=new Blob([new XMLSerializer().serializeToString(poster)],{type:'image/svg+xml'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='semicircle-poster.svg';a.click()};
+$("downloadPng").onclick=()=>{let svg=new XMLSerializer().serializeToString(poster),blob=new Blob([svg],{type:'image/svg+xml'}),url=URL.createObjectURL(blob),img=new Image();img.onload=()=>{let c=document.createElement('canvas');c.width=1700;c.height=2200;c.getContext('2d').drawImage(img,0,0,1700,2200);URL.revokeObjectURL(url);c.toBlob(b=>{let a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='semicircle-poster.png';a.click()})};img.src=url};
+updateRangeLabels();render();loadSelected();
+</script>
+</body>
+</html>
