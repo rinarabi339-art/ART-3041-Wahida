@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Mission Patch · Baruch Patch Generator V2</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=Pacifico&family=Yellowtail&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#3d2f5e;--soft:#7d72a0;--bg:#f7f2f6;--line:#e6dfee;--accent:#7d6bb8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 Fredoka,"Segoe UI",system-ui,sans-serif}
+header{padding:26px 28px 6px;max-width:1240px;margin:auto}
+header h1{margin:0;font:600 30px Fredoka,sans-serif}
+header p{margin:4px 0 0;color:var(--soft)}
+main{max-width:1240px;margin:auto;padding:18px 28px 40px;display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,.9fr);gap:24px;align-items:start}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px}
+.stage{display:flex;flex-direction:column;align-items:center;gap:18px;position:sticky;top:16px;background:linear-gradient(#fff,#fbf7fb)}
+canvas#patch{width:min(100%,600px);aspect-ratio:1;filter:drop-shadow(0 10px 18px rgba(61,47,94,.22))}
+.minis{display:flex;align-items:flex-end;gap:16px;font-size:12px;color:var(--soft)}
+.minis div{text-align:center}.minis canvas{display:block;margin:0 auto 4px}
+h2{font-size:15px;margin:22px 0 10px}
+h2:first-child{margin-top:0}
+h2 small{font-weight:400;color:var(--soft);margin-left:6px}
+.row{margin:10px 0}.row label{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px}
+.row output{color:var(--soft)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+input[type=text],select{width:100%;padding:8px 10px;border:1.5px solid var(--line);border-radius:10px;font:inherit;color:var(--ink);background:#fff}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:3px solid #c9b8e8;outline-offset:1px}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{font:inherit;padding:10px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);cursor:pointer}
+button.p{background:var(--ink);color:#fff;border-color:var(--ink)}
+button:hover{filter:brightness(.96)}
+.gal{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gal button{padding:6px 2px 4px;font-size:11px;border-radius:12px;line-height:1.2}
+.gal button.on,.pals button.on{border-color:var(--accent);background:#f3eefb;box-shadow:0 0 0 2px #c9b8e8}
+.gal canvas{display:block;margin:0 auto 3px;width:100%;max-width:92px;height:auto}
+.pals{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pals button{padding:6px;font-size:11px}
+.sw{height:22px;border-radius:8px;margin-bottom:4px;border:3px solid}
+.chk{display:flex;gap:8px;align-items:center;margin:8px 0}
+#status{font-size:12px;color:var(--soft);min-height:18px;margin-top:12px}
+@media(max-width:900px){main{grid-template-columns:1fr;padding:14px}.stage{position:static}}
+</style>
+</head>
+<body>
+<header><h1>Baruch Mission Patch Generator · Version 2</h1><p>Your original rocket stays at the center, now paired with simple geometric circles and orbital lines inspired by your references.</p></header>
+<main>
+<section class="card stage">
+  <canvas id="patch" width="1050" height="1050" aria-label="Baruch mission patch"></canvas>
+  <div class="minis" aria-label="Small size test">
+    <div><canvas id="m1" width="175" height="175"></canvas>0.6″</div>
+    <div><canvas id="m2" width="105" height="105"></canvas>0.35″</div>
+    <div><canvas id="m3" width="52" height="52"></canvas>0.18″</div>
+    <span>Still cute when tiny?</span>
+  </div>
+</section>
+<aside class="card">
+  <div class="btns">
+    <button class="p" id="gen">Surprise me ✦</button><button id="reset">Back to start</button>
+    <button class="p" id="png">Download PNG (300 dpi)</button><button id="vid">Record animation</button>
+  </div>
+  <h2>Pick a patch <small>14 different looks</small></h2>
+  <div class="gal" id="gal"></div>
+  <h2>Mix your own</h2>
+  <div class="two">
+    <div class="row"><label>Shape</label><select id="shape"></select></div>
+    <div class="row"><label>Journey</label><select id="scene"></select></div>
+    <div class="row"><label>Name style</label><select id="banner"><option value="pill">Pill banner</option><option value="ribbon">Ribbon</option><option value="plain">Outlined letters</option><option value="arc">Curved letters</option></select></div>
+    <div class="row"><label>Lettering</label><select id="font"><option value="round">Soft rounded</option><option value="script">Pacifico script</option><option value="brush">Hand script</option></select></div>
+  </div>
+  <h2>Colors</h2>
+  <div class="pals" id="pals"></div>
+  <h2>Message</h2>
+  <div class="row"><label>Name</label><input id="word" type="text" value="Baruch" maxlength="14"></div>
+  <div class="row"><label>Mission line (optional)</label><input id="line" type="text" maxlength="28" placeholder="Spring 2027"></div>
+  <h2>Details</h2>
+  <div class="row"><label>Sparkles <output id="oSp"></output></label><input id="sparks" type="range" min="0" max="10" value="5"></div>
+  <div class="row"><label>Rocket size <output id="oSc"></output></label><input id="scale" type="range" min="70" max="115" value="100"></div>
+  <label class="chk"><input type="checkbox" id="win" checked> Round window</label>
+  <label class="chk"><input type="checkbox" id="planets" checked> Planets (Earth, Mars, Jupiter, Saturn)</label>
+  <label class="chk"><input type="checkbox" id="stitch" checked> Stitched border</label>
+  <label class="chk"><input type="checkbox" id="anim"> Animate</label>
+  <div id="status" aria-live="polite">Ready.</div>
+</aside>
+</main>
+<script>
+const $=i=>document.getElementById(i),cv=$('patch'),H=455,TAU=Math.PI*2;
+// bg, outline, border, soft accent, gold, banner, banner text, (unused spare)
+const PAL={
+ blush:['Blush','#f6d4d0','#3d2f5e','#7d6bb8','#c9b8e8','#f5c76b','#ffffff','#3d2f5e'],
+ baruch:['Baruch blue','#ffffff','#163d5d','#163d5d','#b3c9f5','#f5c76b','#163d5d','#ffffff'],
+ night:['Night','#222a5c','#1b1540','#f5c76b','#6b7dd0','#ffd86b','#fff6dc','#1b1540'],
+ mint:['Mint','#d4efe4','#23485a','#3f8f86','#a6d9cc','#ffb86b','#ffffff','#23485a'],
+ sunny:['Sunny','#fdeab4','#5a2f3d','#e2803c','#f6c36b','#ff8f6b','#ffffff','#5a2f3d'],
+ lav:['Lavender','#e3dcf7','#33265c','#6a56b5','#b9a9ea','#ffd27a','#ffffff','#33265c'],
+ berry:['Berry','#3b1f4e','#241236','#ff8fb1','#b574c7','#ffd36b','#ffe9f0','#241236'],
+ sky:['Sky','#cfe8fb','#1f3d63','#3d78b8','#9cc6ee','#ffc45e','#ffffff','#1f3d63']};
+const poly=(g,n,r,rot,cy=0)=>{for(let i=0;i<n;i++){const a=rot+i*TAU/n;g[i?'lineTo':'moveTo'](Math.cos(a)*r,Math.sin(a)*r+cy)}g.closePath()};
+const polar=(g,f)=>{for(let i=0;i<=360;i++){const a=i/360*TAU,r=f(a);g[i?'lineTo':'moveTo'](Math.cos(a)*r,Math.sin(a)*r)}g.closePath()};
+// k: scene scale, by: banner height, bw: banner max half-width
+const SH=[
+ {n:'Round',k:1,by:.72,bw:.5,f:g=>g.arc(0,0,1,0,7)},
+ {n:'Squircle',k:1.02,by:.74,bw:.62,f:g=>g.roundRect(-.95,-.95,1.9,1.9,.34)},
+ {n:'Shield',k:.95,by:.62,bw:.5,f:g=>{g.moveTo(-.88,-.95);g.lineTo(.88,-.95);g.lineTo(.88,.1);g.bezierCurveTo(.88,.62,.42,.86,0,1);g.bezierCurveTo(-.42,.86,-.88,.62,-.88,.1);g.closePath()}},
+ {n:'Hexagon',k:.95,by:.68,bw:.48,f:g=>poly(g,6,.98,0)},
+ {n:'Octagon',k:1,by:.72,bw:.55,f:g=>poly(g,8,1.02,Math.PI/8)},
+ {n:'Diamond',k:.74,by:.45,bw:.4,f:g=>poly(g,4,1.1,-Math.PI/2)},
+ {n:'Tall oval',k:.9,by:.7,bw:.45,f:g=>g.ellipse(0,0,.82,1,0,0,7)},
+ {n:'Arch',k:.95,by:.78,bw:.6,f:g=>{g.moveTo(-.85,1);g.lineTo(-.85,-.1);g.arc(0,-.1,.85,Math.PI,0);g.lineTo(.85,1);g.closePath()}},
+ {n:'Scallop',k:1,by:.72,bw:.5,f:g=>polar(g,a=>.9+.08*Math.abs(Math.sin(a*8)))},
+ {n:'Burst',k:1,by:.72,bw:.5,f:g=>{for(let i=0;i<24;i++){const a=i*TAU/24,r=i%2?.84:1.02;g[i?'lineTo':'moveTo'](Math.cos(a)*r,Math.sin(a)*r)}g.closePath()}},
+ {n:'Pennant',k:.95,by:.55,bw:.5,f:g=>{g.moveTo(-.9,-.95);g.lineTo(.9,-.95);g.lineTo(.9,.45);g.lineTo(0,1);g.lineTo(-.9,.45);g.closePath()}},
+ {n:'Flower',k:1,by:.7,bw:.5,f:g=>polar(g,a=>.86+.12*Math.cos(a*8))},
+ {n:'Wide badge',k:.85,by:.58,bw:.7,f:g=>g.roundRect(-1,-.78,2,1.56,.4)},
+ {n:'Triangle',k:.7,by:.5,bw:.45,f:g=>poly(g,3,1.15,-Math.PI/2,.1)}];
+const SC=['Straight up','From Earth','U-turn','One orbit','Diagonal','Loop-the-loop','Zigzag','Jupiter peek','Spiral','Planet hop','Constellation','Comet','Moon landing','Rocket team','Rocket + geometric orbit'];
+// each preset: a different shape + journey + color + name style
+const PRE=[
+ {shape:0,scene:0,pal:'blush',banner:'pill',font:'round'},{shape:1,scene:1,pal:'sky',banner:'ribbon',font:'round'},
+ {shape:2,scene:2,pal:'lav',banner:'pill',font:'script'},{shape:3,scene:3,pal:'night',banner:'arc',font:'round'},
+ {shape:4,scene:4,pal:'sunny',banner:'ribbon',font:'brush'},{shape:5,scene:10,pal:'berry',banner:'plain',font:'round'},
+ {shape:6,scene:8,pal:'mint',banner:'pill',font:'script'},{shape:7,scene:7,pal:'baruch',banner:'ribbon',font:'round'},
+ {shape:8,scene:5,pal:'blush',banner:'arc',font:'script'},{shape:9,scene:11,pal:'sunny',banner:'pill',font:'round'},
+ {shape:10,scene:9,pal:'sky',banner:'plain',font:'brush'},{shape:11,scene:6,pal:'lav',banner:'arc',font:'round'},
+ {shape:12,scene:13,pal:'night',banner:'ribbon',font:'script'},{shape:13,scene:12,pal:'mint',banner:'pill',font:'round'},
+  {shape:0,scene:14,pal:'night',banner:'arc',font:'round'}];
+const FONTS={round:['600','Fredoka,"Trebuchet MS",sans-serif'],script:['400','Pacifico,"Segoe Script",cursive'],brush:['400','Yellowtail,"Segoe Script",cursive']};
+let st={...PRE[14],seed:27,preset:14},raf=0,t0=0,G,P,T,AN,O;
+function rng(s){return()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+// ---------- rocket (no face, no cloud) ----------
+function rocket(fl){
+  const g=G,ol=P[2],L='#dcd8f5',M='#aaa5d6',N='#bdb9e0';
+  g.lineJoin='round';g.lineCap='round';g.strokeStyle=ol;g.lineWidth=13;
+  g.save();g.translate(0,95);g.scale(1,fl*(AN?1+.09*Math.sin(T*10):1));
+  g.beginPath();g.moveTo(-40,0);g.bezierCurveTo(-48,55,-16,100,0,128);g.bezierCurveTo(16,100,48,55,40,0);g.closePath();
+  g.fillStyle=P[5];g.fill();g.stroke();
+  g.fillStyle='rgba(255,255,255,.55)';g.beginPath();g.ellipse(-17,40,7,22,.15,0,7);g.fill();g.restore();
+  for(const s of[-1,1]){g.save();g.scale(s,1);g.beginPath();g.moveTo(88,-10);g.bezierCurveTo(150,15,178,75,166,135);g.bezierCurveTo(138,125,116,100,96,82);g.closePath();g.fillStyle=M;g.fill();g.stroke();
+    g.fillStyle='rgba(255,255,255,.35)';g.beginPath();g.ellipse(128,70,6,26,-.35,0,7);g.fill();g.restore()}
+  const body=()=>{g.beginPath();g.moveTo(0,-205);g.bezierCurveTo(62,-168,102,-80,102,10);g.lineTo(102,76);g.lineTo(-102,76);g.lineTo(-102,10);g.bezierCurveTo(-102,-80,-62,-168,0,-205);g.closePath()};
+  body();g.fillStyle='#fff';g.fill();
+  g.save();body();g.clip();
+  g.fillStyle=L;g.beginPath();g.ellipse(128,-20,66,210,0,0,7);g.fill();
+  g.fillStyle=N;g.fillRect(-120,-220,240,100);g.fillRect(-120,52,240,30);
+  g.beginPath();g.moveTo(-120,-120);g.lineTo(120,-120);g.moveTo(-120,52);g.lineTo(120,52);g.stroke();
+  g.fillStyle='rgba(255,255,255,.6)';g.beginPath();g.ellipse(-48,-165,9,22,.5,0,7);g.fill();
+  g.restore();body();g.stroke();
+  g.beginPath();g.moveTo(-58,76);g.lineTo(58,76);g.lineTo(46,104);g.lineTo(-46,104);g.closePath();g.fillStyle=M;g.fill();g.stroke();
+  g.beginPath();g.ellipse(0,60,17,56,0,0,7);g.fillStyle=N;g.fill();g.stroke();
+  if(O.win){g.beginPath();g.arc(0,-45,38,0,7);g.fillStyle='#bfe3f2';g.fill();g.lineWidth=12;g.stroke();
+    g.strokeStyle='rgba(255,255,255,.85)';g.lineWidth=8;g.beginPath();g.arc(0,-45,22,Math.PI*1.1,Math.PI*1.5);g.stroke()}
+}
+// ---------- real planets ----------
+function planet(g,type,x,y,r){
+  const ol=P[2],C={saturn:'#e8c88c',mars:'#e0704f',jupiter:'#efcfa6',earth:'#5aa9e6',moon:'#dedbe8'},lw=Math.min(12,Math.max(6,r*.12));
+  g.save();g.translate(x,y);g.lineJoin='round';g.lineCap='round';
+  const ring=back=>{g.save();g.rotate(-.35);g.beginPath();g.ellipse(0,0,r*1.75,r*.46,0,back?Math.PI:0,back?TAU:Math.PI);
+    g.strokeStyle=ol;g.lineWidth=Math.max(10,r*.2)+5;g.stroke();g.strokeStyle='#f3deaa';g.lineWidth=Math.max(10,r*.2)-3;g.stroke();g.restore()};
+  if(type==='saturn')ring(true);
+  g.beginPath();g.arc(0,0,r,0,TAU);g.fillStyle=C[type];g.fill();
+  g.save();g.clip();
+  const el=(a,b,c,d,col,rot=0)=>{g.fillStyle=col;g.beginPath();g.ellipse(r*a,r*b,r*c,r*d,rot,0,7);g.fill()};
+  if(type==='saturn'){g.fillStyle='#d8ae6c';g.fillRect(-r,-r*.4,2*r,r*.24);g.fillRect(-r,r*.1,2*r,r*.2)}
+  if(type==='mars'){el(-.3,-.1,.3,.17,'#b9503a');el(.35,.35,.22,.13,'#b9503a');el(.2,-.45,.12,.08,'#c85d42');el(0,-1,.5,.3,'#fff')}
+  if(type==='jupiter'){for(const[y,h,c]of[[-.75,.18,'#d09a6a'],[-.35,.14,'#f8e8d0'],[0,.2,'#d09a6a'],[.4,.14,'#f8e8d0'],[.65,.22,'#d09a6a']]){g.fillStyle=c;g.fillRect(-r,r*y,2*r,r*h)}el(.32,.3,.2,.12,'#c4573f')}
+  if(type==='earth'){el(-.3,-.25,.38,.28,'#79c48a',.5);el(.4,.3,.3,.22,'#79c48a',-.4);el(.1,-.6,.3,.08,'rgba(255,255,255,.85)');el(-.2,.5,.3,.07,'rgba(255,255,255,.85)')}
+  if(type==='moon'){el(-.3,-.2,.22,.2,'#c3bfd3');el(.35,.25,.28,.26,'#c3bfd3');el(.1,.7,.15,.13,'#c3bfd3');el(.45,-.45,.12,.11,'#c3bfd3')}
+  g.restore();
+  g.strokeStyle=ol;g.lineWidth=lw;g.beginPath();g.arc(0,0,r,0,TAU);g.stroke();
+  g.strokeStyle='rgba(255,255,255,.7)';g.lineWidth=Math.min(9,r*.1);g.beginPath();g.arc(0,0,r*.72,Math.PI*1.1,Math.PI*1.45);g.stroke();
+  if(type==='saturn')ring(false);
+  g.restore();
+}
+function sparkle(g,x,y,r,kind,tw){
+  g.save();g.translate(x,y);g.strokeStyle=P[2];g.lineJoin='round';g.lineCap='round';
+  if(kind===0){g.fillStyle=P[5];g.lineWidth=6;g.beginPath();for(let i=0;i<8;i++){const a=i*Math.PI/4-Math.PI/2,q=i%2?r*.3:r*tw;g[i?'lineTo':'moveTo'](Math.cos(a)*q,Math.sin(a)*q)}g.closePath();g.fill();g.stroke()}
+  else if(kind===1){g.strokeStyle=P[4];g.lineWidth=8;g.beginPath();g.moveTo(-r*.5,0);g.lineTo(r*.5,0);g.moveTo(0,-r*.5);g.lineTo(0,r*.5);g.stroke()}
+  else{g.strokeStyle=P[4];g.lineWidth=9;g.beginPath();g.arc(0,0,r*.3,0,7);g.stroke()}
+  g.restore();
+}
+// ---------- scene helpers ----------
+const RK=(x,y,a,s,fl=1)=>{G.save();G.translate(x,y+(AN?Math.sin(T*2)*6:0));G.rotate(a*Math.PI/180);G.scale(s*O.scale,s*O.scale);G.translate(0,50);rocket(fl);G.restore()};
+const TR=(pts,lw=10)=>{G.save();G.strokeStyle=P[4];G.lineWidth=lw;G.lineCap='round';G.lineJoin='round';G.setLineDash([.1,22]);G.lineDashOffset=AN?-T*30:0;G.beginPath();pts.forEach((p,i)=>G[i?'lineTo':'moveTo'](p[0],p[1]));G.stroke();G.restore()};
+const PL=(t,x,y,r)=>{if(O.planets)planet(G,t,x,y,r)};
+const smp=(f,a,b,n=50)=>Array.from({length:n+1},(_,i)=>f(a+(b-a)*i/n));
+const ANG=(a,b)=>Math.atan2(b[0]-a[0],-(b[1]-a[1]))*180/Math.PI;
+const qb=(p,c,q,u)=>[(1-u)*(1-u)*p[0]+2*(1-u)*u*c[0]+u*u*q[0],(1-u)*(1-u)*p[1]+2*(1-u)*u*c[1]+u*u*q[1]];
+const osc=a=>AN?a*Math.sin(T*1.5):0;
+const SCENES=[
+ ()=>{[-250,-215,215,250].forEach((x,i)=>{const y0=60+((AN?T*120:0)+i*55)%140;G.strokeStyle=P[4];G.lineWidth=9;G.lineCap='round';G.beginPath();G.moveTo(x,y0);G.lineTo(x,y0+60);G.stroke()});RK(0,-25,0,1.15,1.15)},
+ ()=>{PL('earth',0,470,300);TR(smp(u=>qb([-120,175],[-150,60],[28,80],u),0,1));RK(70,-90,14,1);PL('saturn',-255,-235,42)},
+ ()=>{const f=u=>[-260+520*u,-240+430*(1-Math.pow(2*u-1,4))],e=.93+osc(.02);TR(smp(f,0,.86));PL('earth',-262,-250,40);PL('mars',262,-266,40);RK(...f(e),ANG(f(e-.02),f(e+.02)),.8)},
+ ()=>{G.save();G.translate(0,-20);G.rotate(-.35);G.strokeStyle=P[4];G.lineWidth=9;G.beginPath();G.ellipse(0,0,340,135,0,0,TAU);G.stroke();
+   G.save();G.rotate(.35);PL('jupiter',0,0,78);G.restore();
+   const q=AN?T*.7-.6:-.6,x=340*Math.cos(q),y=135*Math.sin(q);RK(x,y,ANG([0,0],[-340*Math.sin(q),135*Math.cos(q)]),.7);G.restore()},
+ ()=>{TR(smp(u=>[-250+190*u,215-90*u],0,1,20));RK(70,-20,38,1.1,1.1);PL('mars',255,-235,52)},
+ ()=>{const f=u=>{const p=u*TAU;return[-260+500*u+110*Math.sin(p),210-450*u+110*(Math.cos(p)-1)]},e=.93+osc(.015);TR(smp(f,0,.84,80));RK(...f(e),ANG(f(e-.02),f(e+.02)),.7);PL('saturn',250,150,44)},
+ ()=>{TR([[-230,215],[210,130],[-210,45],[210,-40],[0,-70]]);RK(0,-185,0,.85);PL('mars',-258,-258,38)},
+ ()=>{PL('jupiter',-250,170,230);TR(smp(u=>qb([10,100],[0,150],[-70,150],u),0,1,12));RK(110,-70,30,1)},
+ ()=>{const f=u=>{const a=u*TAU*1.6-1.2,r=22+245*u;return[Math.cos(a)*r,Math.sin(a)*r*.85-20]},e=.96+osc(.015);TR(smp(f,0,.88,90));PL('earth',0,-20,30);RK(...f(e),ANG(f(e-.02),f(e+.02)),.7)},
+ ()=>{PL('earth',-235,150,70);PL('mars',235,-225,58);const b=u=>qb([-190,95],[-230,-250],[190,-190],u),e=.55+osc(.03);TR(smp(b,0,.43,40));RK(...b(e),ANG(b(e-.02),b(e+.02)),.8)},
+ ()=>{const L=[[-290,130],[-270,-60],[-170,-230]],Rr=[[190,-230],[270,-60],[290,130]];TR(L);TR(Rr);[...L,...Rr].forEach((p,i)=>sparkle(G,p[0],p[1],34,0,1+(AN?.15*Math.sin(T*3+i):0)));RK(0,-30,-20,.95)},
+ ()=>{G.save();G.lineCap='round';G.beginPath();G.moveTo(-290,230);G.bezierCurveTo(-100,230,-30,120,70,20);G.strokeStyle=P[4];G.globalAlpha=.55;G.lineWidth=52;G.stroke();G.globalAlpha=.9;G.strokeStyle=P[5];G.lineWidth=16;G.stroke();G.restore();RK(120,-80,45,1)},
+ ()=>{PL('moon',0,500,330);PL('earth',230,-235,44);TR([[0,100],[0,150]],8);RK(0,-30,0,.95,.4)},
+ ()=>{RK(0,-30,0,.9);RK(-215,60,-15,.5,.8);RK(215,60,15,.5,.8)},
+  // V2 variation: preserve the original rocket and add restrained geometric orbit details.
+  ()=>{ 
+    G.save();
+    G.strokeStyle=P[4]; G.lineWidth=7;
+    [175,225,278,330].forEach(r=>{G.beginPath();G.arc(0,-55,r,0,TAU);G.stroke()});
+    G.lineWidth=8;
+    G.beginPath();G.moveTo(-320,90);G.lineTo(320,90);G.moveTo(-275,-185);G.lineTo(275,-185);G.stroke();
+    G.fillStyle=P[5];G.strokeStyle=P[2];G.lineWidth=9;
+    [[-245,90,27],[240,-185,33],[-95,-285,20],[270,210,18]].forEach(([x,y,r])=>{G.beginPath();G.arc(x,y,r,0,TAU);G.fill();G.stroke()});
+    [[-330,-70],[325,5],[-190,-290],[170,280]].forEach(([x,y])=>sparkle(G,x,y,19,1,1));
+    RK(0,-55,0,.83,1);
+    G.restore();
+  }
+];
+function arcText(g,txt,r,stroke){
+  const ws=[...txt].map(c=>g.measureText(c).width),tot=ws.reduce((a,b)=>a+b,0)/r;
+  for(const pass of stroke?[0,1]:[1]){let cum=0;[...txt].forEach((c,i)=>{const th=Math.PI/2+tot/2-(cum+ws[i]/2)/r;g.save();g.translate(Math.cos(th)*r,Math.sin(th)*r);g.rotate(th-Math.PI/2);pass?g.fillText(c,0,0):g.strokeText(c,0,0);g.restore();cum+=ws[i]})}
+}
+function opts(){return{word:$('word').value.trim()||'Baruch',line:$('line').value.trim(),font:st.font,banner:st.banner,scene:st.scene,sparks:+$('sparks').value,scale:+$('scale').value/100,win:$('win').checked,planets:$('planets').checked,stitch:$('stitch').checked,an:$('anim').checked,shape:st.shape,pal:st.pal,seed:st.seed}}
+function render(g,S,time,o){
+  G=g;O=o;P=PAL[o.pal];AN=o.an;T=o.an?time:0;
+  const sh=SH[o.shape],R=rng(o.seed),k=S/1050;
+  g.save();g.clearRect(0,0,S,S);g.scale(k,k);g.translate(525,525);
+  const build=s=>{g.beginPath();g.save();g.scale(s,s);sh.f(g);g.restore()};
+  g.save();build(H);g.fillStyle=P[1];g.fill();g.clip();
+  const gl=g.createRadialGradient(0,-60,20,0,-60,520);gl.addColorStop(0,'rgba(255,255,255,.45)');gl.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=gl;g.fillRect(-525,-525,1050,1050);
+  g.save();g.translate(0,(sh.by-.72)*H*.6);g.scale(sh.k,sh.k);
+  for(let i=0;i<o.sparks;i++){const a=R()*TAU,r=270+R()*110,sz=14+R()*14,y=Math.sin(a)*r*.8-30;if(y<230)sparkle(g,Math.cos(a)*r,y,sz,i%3,1+(o.an?.18*Math.sin(T*3+i*2):0))}
+  SCENES[o.scene]();g.restore();
+  // name
+  const [fw,ff]=FONTS[o.font],sf=px=>g.font=fw+' '+px+'px '+ff,sty=o.banner,by=sh.by*H;
+  g.lineJoin='round';g.lineCap='round';g.textAlign='center';g.textBaseline='middle';
+  let px=sty==='arc'?84:80;sf(px);
+  const maxW=sty==='arc'?500:sty==='plain'?sh.bw*H*2+30:sh.bw*H*2-(sty==='ribbon'?130:70);
+  while(g.measureText(o.word).width>maxW&&px>24){px-=2;sf(px)}
+  const tw=g.measureText(o.word).width,two=o.line&&(sty==='pill'||sty==='ribbon');
+  const small=()=>{g.font='600 25px Fredoka,"Trebuchet MS",sans-serif';if('letterSpacing'in g)g.letterSpacing='2px'};
+  if(sty==='pill'||sty==='ribbon'){
+    const bh=two?118:88,w=Math.min(sh.bw*H-(sty==='ribbon'?44:0),Math.max(120,tw/2+46));
+    g.strokeStyle=P[2];g.lineWidth=9;
+    if(sty==='ribbon')for(const s of[-1,1]){g.beginPath();g.moveTo(s*(w-10),by-bh/2+16);g.lineTo(s*(w+44),by-bh/2+16);g.lineTo(s*(w+22),by+16);g.lineTo(s*(w+44),by+bh/2+16);g.lineTo(s*(w-10),by+bh/2+16);g.closePath();g.fillStyle=P[5];g.fill();g.stroke()}
+    g.beginPath();g.roundRect(-w,by-bh/2,w*2,bh,sty==='pill'?28:10);g.fillStyle=P[6];g.fill();g.stroke();
+    g.fillStyle=P[7];g.fillText(o.word,0,by+(two?-16:3));
+    if(two){small();g.fillText(o.line,0,by+28,w*2-40)}
+  }else{
+    g.strokeStyle=P[2];g.lineWidth=18;g.fillStyle=P[6];
+    if(sty==='arc')arcText(g,o.word,320,true);else{g.strokeText(o.word,0,by);g.fillText(o.word,0,by)}
+    if(o.line){small();g.lineWidth=9;const ly=sty==='arc'?372:by+56;g.strokeText(o.line,0,ly,360);g.fillText(o.line,0,ly,360)}
+  }
+  if('letterSpacing'in g)g.letterSpacing='0px';
+  g.restore();
+  build(H);g.lineJoin='round';g.strokeStyle=P[3];g.lineWidth=34;g.stroke();
+  if(o.stitch){build(H*.935);g.strokeStyle='rgba(255,255,255,.8)';g.lineWidth=4.5;g.setLineDash([16,13]);g.stroke();g.setLineDash([])}
+  build(H+17);g.strokeStyle=P[2];g.lineWidth=5;g.stroke();
+  g.restore();
+}
+function draw(time=0){
+  render(cv.getContext('2d'),1050,time,opts());
+  for(const[id,s]of[['m1',175],['m2',105],['m3',52]]){const m=$(id).getContext('2d');m.clearRect(0,0,s,s);m.drawImage(cv,0,0,s,s)}
+}
+function gallery(){const o=opts();document.querySelectorAll('#gal canvas').forEach((c,i)=>render(c.getContext('2d'),c.width,0,{...o,...PRE[i],an:false}))}
+function sync(){$('oSp').textContent=$('sparks').value;$('oSc').textContent=$('scale').value+'%';
+  for(const k of['shape','scene','banner','font'])$(k).value=st[k]}
+function refresh(){sync();if(!$('anim').checked)draw();gallery();
+  document.querySelectorAll('#gal button').forEach((b,i)=>b.classList.toggle('on',i===st.preset));
+  document.querySelectorAll('#pals button').forEach(b=>b.classList.toggle('on',b.dataset.p===st.pal))}
+const status=t=>$('status').textContent=t;
+SH.forEach((s,i)=>$('shape').add(new Option(s.n,i)));SC.forEach((s,i)=>$('scene').add(new Option(s,i)));
+PRE.forEach((p,i)=>{const b=document.createElement('button');b.innerHTML='<canvas width="184" height="184"></canvas>'+SC[p.scene];b.onclick=()=>{st={...st,...p,preset:i};refresh();status(SH[p.shape].n+' patch, '+SC[p.scene]+'.')};$('gal').appendChild(b)});
+for(const k in PAL){const p=PAL[k],b=document.createElement('button');b.dataset.p=k;b.innerHTML=`<div class="sw" style="background:${p[1]};border-color:${p[3]}"></div>${p[0]}`;b.onclick=()=>{st.pal=k;refresh()};$('pals').appendChild(b)}
+['shape','scene','banner'].forEach(k=>$(k).addEventListener('change',()=>{st[k]=+$(k).value||$(k).value;if(k==='banner')st.banner=$(k).value;st.preset=-1;refresh()}));
+$('font').addEventListener('change',()=>{st.font=$('font').value;st.preset=-1;refresh()});
+['word','line','sparks','scale','win','planets','stitch'].forEach(id=>$(id).addEventListener('input',refresh));
+function loop(ts){if(!t0)t0=ts;draw((ts-t0)/1000);raf=requestAnimationFrame(loop)}
+function setAnim(){cancelAnimationFrame(raf);t0=0;if($('anim').checked)raf=requestAnimationFrame(loop);else draw()}
+$('anim').addEventListener('change',setAnim);
+$('gen').onclick=()=>{const R=rng(Date.now()),pick=a=>a[Math.floor(R()*a.length)];
+  st={shape:Math.floor(R()*SH.length),scene:Math.floor(R()*SC.length),pal:pick(Object.keys(PAL)),banner:pick(['pill','ribbon','plain','arc']),font:pick(['round','script','brush']),seed:Math.floor(R()*1e6),preset:-1};
+  $('sparks').value=2+Math.floor(R()*8);refresh();status('New mix: '+SH[st.shape].n+', '+SC[st.scene]+'.')};
+$('reset').onclick=()=>{st={...PRE[14],seed:27,preset:14};$('sparks').value=5;$('scale').value=100;$('win').checked=$('planets').checked=$('stitch').checked=true;refresh();status('Back to the start.')};
+$('png').onclick=()=>{const c=document.createElement('canvas');c.width=c.height=1050;render(c.getContext('2d'),1050,0,{...opts(),an:false});
+  c.toBlob(b=>{const a=document.createElement('a');a.download='baruch-mission-patch-3.5in-300dpi.png';a.href=URL.createObjectURL(b);a.click();status('Saved 1050×1050 px = 3.5″ at 300 dpi, transparent corners.')})};
+$('vid').onclick=()=>{
+  if(!window.MediaRecorder){status('This browser cannot record video.');return}
+  const was=$('anim').checked;$('anim').checked=true;setAnim();
+  const rec=new MediaRecorder(cv.captureStream(30),{mimeType:'video/webm'}),ch=[];
+  rec.ondataavailable=e=>ch.push(e.data);
+  rec.onstop=()=>{const a=document.createElement('a');a.download='baruch-patch-animated.webm';a.href=URL.createObjectURL(new Blob(ch,{type:'video/webm'}));a.click();$('anim').checked=was;setAnim();status('Animation saved (6 seconds, WebM).')};
+  rec.start();status('Recording 6 seconds…');setTimeout(()=>rec.stop(),6000)};
+refresh();
+(document.fonts?Promise.all([document.fonts.load('600 40px Fredoka'),document.fonts.load('40px Pacifico'),document.fonts.load('40px Yellowtail')]).catch(()=>{}):Promise.resolve()).then(refresh);
+</script>
+</body>
+</html>
