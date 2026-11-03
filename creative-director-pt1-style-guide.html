@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creative Director Pt. 1: Style Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--blush:#E5AFAB;--cream:#EFD8C9;--sand:#D2AF98;--mauve:#BC9587;--gold:#B8975A;--ink:#2B2326;--paper:#FBF3EE;
+--display:'Bodoni Moda','Didot','Bodoni 72',Georgia,serif;--body:'Jost','Helvetica Neue',Arial,sans-serif}
+*{box-sizing:border-box;margin:0}
+body{background:linear-gradient(180deg,#F6DDD8 0,var(--paper) 520px,var(--paper) 100%);color:var(--ink);font:300 1.05rem/1.75 var(--body)}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.15}
+a{color:#8A5F54} a:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+p{max-width:60ch}
+
+/* hero: the moodboard itself is the backdrop, the title card sits on it */
+.hero{position:relative;min-height:100svh;display:grid;place-items:center;padding:3rem 1.25rem;
+ background:linear-gradient(rgba(251,243,238,.55),rgba(251,243,238,.55)),url(images/moodboard-art-of-writing.png) center/cover}
+.card{position:relative;background:var(--paper);text-align:center;padding:4.5rem 3rem 3rem;width:min(560px,100%);
+ border:1px solid var(--blush);outline:1px solid var(--blush);outline-offset:-10px;box-shadow:0 20px 60px rgba(120,70,60,.18)}
+.card svg{position:absolute;left:50%;top:0;width:150px;transform:translate(-50%,-52%)}
+.wm{font-family:var(--display);font-size:2.6rem;font-weight:600;letter-spacing:.02em}
+.card h1{font-size:clamp(2.4rem,8vw,3.6rem);font-style:italic;margin:.3rem 0 .8rem}
+.card .en{font-size:.85rem;letter-spacing:.28em;text-transform:uppercase}
+.card hr{width:110px;border:0;border-top:1px solid var(--ink);margin:1.2rem auto}
+.card .tag{font-family:var(--display);font-style:italic;font-size:1.2rem}
+.card .doc{margin-top:2rem;font-size:.9rem;color:#6d5a54}
+
+main{max-width:1000px;margin:0 auto;padding:2rem 1.25rem 4rem}
+section{padding:4rem 0 0;text-align:center}
+section>h2{font-size:2.4rem;font-style:italic}
+section>h2::after{content:"";display:block;width:70px;height:1px;background:var(--gold);margin:1rem auto 1.8rem}
+section>p{margin-left:auto;margin-right:auto}
+
+.sheet{background:#fff;border:1px solid var(--cream);padding:2.2rem;text-align:left;box-shadow:0 10px 30px rgba(120,70,60,.08)}
+.brief{display:grid;grid-template-columns:1.2fr 1fr;gap:2.5rem}
+.brief dl{display:grid;grid-template-columns:auto 1fr;gap:.6rem 1.2rem;align-content:start;border-left:1px solid var(--blush);padding-left:2rem}
+.brief dt{font-family:var(--display);font-style:italic}
+
+.print{background:#fff;padding:14px;box-shadow:0 14px 40px rgba(120,70,60,.16);margin:0 auto 2rem;max-width:960px}
+.print img{display:block;width:100%}
+.print figcaption{font-family:var(--display);font-style:italic;padding:.8rem 0 .2rem;text-align:center}
+
+.dots{display:flex;flex-wrap:wrap;justify-content:center;gap:2.2rem 1.6rem}
+.dot{width:150px;text-align:center}
+.dot i{display:block;width:150px;height:150px;border-radius:50%;background:var(--c);box-shadow:0 8px 20px rgba(120,70,60,.15);margin-bottom:.8rem}
+.dot b{font-family:var(--display);font-weight:400;font-size:1.1rem;display:block}
+.dot code{font:400 .85rem var(--body)}
+.dot span{display:block;font-size:.85rem;line-height:1.4;margin-top:.3rem}
+
+.fonts{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.fonts .sheet{text-align:center}
+.big-d{font-family:var(--display);font-size:2.8rem;font-style:italic;line-height:1.1;margin:1rem 0}
+.big-j{font-size:2.1rem;margin:1rem 0}
+.fonts p{margin:0 auto}
+
+.logos{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+.logo{aspect-ratio:1;display:grid;place-items:center;background:var(--bg);outline:1px solid var(--gold);outline-offset:-10px}
+.logo svg{width:66%} .logo.s svg{width:30%}
+.cap{font-size:.9rem;margin:1rem auto 0}
+footer{text-align:center;font-size:.9rem;padding:0 1rem 3rem;color:#6d5a54}
+@media(max-width:760px){.brief,.fonts{grid-template-columns:1fr}.brief dl{border:0;padding:0}.logos{grid-template-columns:1fr 1fr}.card{padding:4rem 1.5rem 2rem}}
+</style></head><body>
+
+<header class="hero"><div class="card"><svg viewBox="0 0 200 130" role="img" aria-label="Bow logomark"><g fill="#E5AFAB" stroke="#2B2326" stroke-width="2.5" stroke-linejoin="round"><path d="M100 60C72 12 18 16 24 56C28 90 76 84 100 60Z"/><path d="M100 60C128 12 182 16 176 56C172 90 124 84 100 60Z"/><path d="M96 66L70 118L88 108L96 122L106 70Z"/><path d="M104 66L130 118L112 108L104 122L94 70Z"/></g><ellipse cx="100" cy="60" rx="13" ry="15" fill="#B8975A" stroke="#2B2326" stroke-width="2.5"/></svg>
+<div class="wm">DIOR</div>
+<h1>L’Art d’Écrire</h1>
+<div class="en">The Art of Writing</div><hr>
+<div class="tag">Dream. Plan. Create.</div>
+<p class="doc" style="margin-left:auto;margin-right:auto">Creative Director Pt. 1: Style Guide</p>
+</div></header>
+
+<main>
+<section id="campaign"><h2>The campaign</h2>
+<div class="sheet brief"><div>
+<p>L’Art d’Écrire is a Dior stationery collection that turns everyday writing into a ritual. Paper clips, highlighters, rulers, pencils, pens, markers, notebooks, sketchbooks, staplers, diaries, stickers, planners, journals and calendars are all dressed in blush pink, pearl, gold and toile de Jouy.</p><br>
+<p>The line follows three verbs: dream in the sketchbook, plan in the calendar, create with the pen. Every piece feels like a small gift tied with a silk bow.</p></div>
+<dl><dt>Brand</dt><dd>Christian Dior</dd><dt>Product</dt><dd>Luxury stationery and desk accessories</dd><dt>Audience</dt><dd>Fashion students, creatives and gift buyers, ages 18 to 35</dd><dt>Feeling</dt><dd>Romantic, polished, Parisian</dd><dt>Tagline</dt><dd>Dream. Plan. Create.</dd></dl></div></section>
+
+<section id="moodboard"><h2>Moodboard</h2>
+<p>Over 20 images across two boards. The first is the product world. The second is the atmosphere: Paris, blossom, roses, silk and pearls.</p><br>
+<figure class="print"><img src="images/moodboard-art-of-writing.png" alt="Pink Dior stationery moodboard"><figcaption>The stationery world</figcaption></figure>
+<figure class="print"><img src="images/moodboard-collage.png" alt="Pink roses, silk, pearls, Paris and cherry blossom collage"><figcaption>Mood and atmosphere</figcaption></figure>
+<p>Required reading: <a href="https://medium.com/@JohnnyVandal/the-art-of-the-fashion-mood-board-57f496c6dfe6">The Art of the Fashion Mood Board</a>. Both boards keep one color story and mix objects, textures and places.</p></section>
+
+<section id="palette"><h2>Color palette</h2>
+<p style="margin-bottom:2rem">Sampled from the swatches on the board, plus gold from the clips and pearls.</p>
+<div class="dots">
+<div class="dot" style="--c:#E5AFAB"><i></i><b>Dior Blush</b><code>#E5AFAB</code><span>Notebooks, highlighters, staplers</span></div>
+<div class="dot" style="--c:#EFD8C9"><i></i><b>Pearl Cream</b><code>#EFD8C9</code><span>Paper and packaging</span></div>
+<div class="dot" style="--c:#D2AF98"><i></i><b>Champagne Sand</b><code>#D2AF98</code><span>Ribbons, pen caps</span></div>
+<div class="dot" style="--c:#BC9587"><i></i><b>Dusty Mauve</b><code>#BC9587</code><span>Spines, small details</span></div>
+<div class="dot" style="--c:#B8975A"><i></i><b>Atelier Gold</b><code>#B8975A</code><span>Foil stamping, clips</span></div>
+<div class="dot" style="--c:#2B2326"><i></i><b>Wordmark Ink</b><code>#2B2326</code><span>Logo and text</span></div>
+</div></section>
+
+<section id="fonts"><h2>Fonts</h2><div class="fonts">
+<div class="sheet"><h3>Bodoni Moda</h3><div class="big-d">L’Art d’Écrire</div><p>For headlines, product names and taglines. Its high-contrast strokes match the Dior wordmark. Regular for names, italic for “Dream. Plan. Create.”</p></div>
+<div class="sheet"><h3>Jost</h3><div class="big-j">Aa Bb Cc 123</div><p>For product details, calendar numbers and packaging copy. A light sans that stays quiet beside the serif.</p></div>
+</div></section>
+
+<section id="logomark"><h2>Logomark</h2>
+<p style="margin-bottom:1.5rem">A silk bow with a gold knot, taken from the ribbons and bow-shaped clips on the board. It sits beside the Dior wordmark on pens, clips, stickers and covers, the way Monster Eyewear + The Met pair two names.</p>
+<div class="logos">
+<div class="logo" style="--bg:#EFD8C9"><svg viewBox="0 0 200 130" role="img" aria-label="Bow logomark"><g fill="#E5AFAB" stroke="#2B2326" stroke-width="2.5" stroke-linejoin="round"><path d="M100 60C72 12 18 16 24 56C28 90 76 84 100 60Z"/><path d="M100 60C128 12 182 16 176 56C172 90 124 84 100 60Z"/><path d="M96 66L70 118L88 108L96 122L106 70Z"/><path d="M104 66L130 118L112 108L104 122L94 70Z"/></g><ellipse cx="100" cy="60" rx="13" ry="15" fill="#B8975A" stroke="#2B2326" stroke-width="2.5"/></svg></div>
+<div class="logo" style="--bg:#2B2326"><svg viewBox="0 0 200 130" role="img" aria-label="Bow logomark"><g fill="#E5AFAB" stroke="#EFD8C9" stroke-width="2.5" stroke-linejoin="round"><path d="M100 60C72 12 18 16 24 56C28 90 76 84 100 60Z"/><path d="M100 60C128 12 182 16 176 56C172 90 124 84 100 60Z"/><path d="M96 66L70 118L88 108L96 122L106 70Z"/><path d="M104 66L130 118L112 108L104 122L94 70Z"/></g><ellipse cx="100" cy="60" rx="13" ry="15" fill="#B8975A" stroke="#EFD8C9" stroke-width="2.5"/></svg></div>
+<div class="logo s" style="--bg:#E5AFAB"><svg viewBox="0 0 200 130" role="img" aria-label="Bow logomark"><g fill="#FBF3EE" stroke="#2B2326" stroke-width="2.5" stroke-linejoin="round"><path d="M100 60C72 12 18 16 24 56C28 90 76 84 100 60Z"/><path d="M100 60C128 12 182 16 176 56C172 90 124 84 100 60Z"/><path d="M96 66L70 118L88 108L96 122L106 70Z"/><path d="M104 66L130 118L112 108L104 122L94 70Z"/></g><ellipse cx="100" cy="60" rx="13" ry="15" fill="#B8975A" stroke="#2B2326" stroke-width="2.5"/></svg></div></div>
+<p class="cap">Primary on Pearl Cream, reversed on Wordmark Ink, and the small version for clips and stickers.</p></section>
+</main>
+<footer>Creative Director Pt. 1: Style Guide, L’Art d’Écrire. Concept project, not affiliated with Christian Dior.</footer>
+</body></html>
